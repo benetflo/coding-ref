@@ -1,5 +1,15 @@
 #include <stdio.h>
 
+/*
+*   Can be used to monitor sensor statuses. 
+
+    - Use interrupt to check status of sensor (timer or event based)
+    - In interrupt function, check if value goes over thresholds. If they do switch state on state machine else do nothing.
+    - Only switch the state in the interrupt function! Call action function in main based on state of FSM
+
+*/
+
+
 typedef enum
 {
     NORMAL,
