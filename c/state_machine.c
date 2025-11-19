@@ -14,6 +14,15 @@ typedef enum
     SENSOR_CRITICAL
 } sensor_events_t;
 
+const char * state_names[] = {"NORMAL", "WARNING", "ALARM"};
+const char * event_names[] = {"SENSOR_OK", "SENSOR_HIGH", "SENSOR_CRITICAL"};
+
+typedef struct
+{
+    int sensor_value;
+    sensor_states_t state;
+    sensor_events_t event;
+} sensor_t;
 
 sensor_events_t check_sensor_status(int value)
 {
@@ -71,18 +80,15 @@ sensor_states_t fsm_update(sensor_states_t state, sensor_events_t event)
 
 int main()
 {
-    int current_sensor_value = 10;
-    sensor_events_t current_event = SENSOR_OK;
-    sensor_states_t current_state = NORMAL;
+    sensor_t temp_sensor = {10, SENSOR_OK, NORMAL};
 
     while(1)
     {
-        scanf("%d", &current_sensor_value);
-        current_event = check_sensor_status(current_sensor_value);
-        current_state = fsm_update(current_state, current_event);
-        printf("Current state: %d\nCurrent event: %d\n", current_state, current_event);
+        scanf("%d", &temp_sensor.sensor_value);
+        temp_sensor.event = check_sensor_status(temp_sensor.sensor_value);
+        temp_sensor.state = fsm_update(temp_sensor.state, temp_sensor.event);
+        printf("Current state: %s\nCurrent event: %s\n", state_names[temp_sensor.state], event_names[temp_sensor.event]);
     }
-
 
     return 0;
 }
