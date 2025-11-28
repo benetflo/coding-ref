@@ -89,7 +89,7 @@ static void uart0_send_message(const char* message)
 }
 
 /**
-\\wsl.localhost\Ubuntu\home\benji\PicoEnv-share\sensor.uf2 * @brief Receive complete message from UART1 with timeout
+ * @brief Receive complete message from UART1 with timeout
  * @param buffer Buffer to store received message
  * @param buffer_size Size of the buffer
  * @return Number of bytes received, or 0 if no data
