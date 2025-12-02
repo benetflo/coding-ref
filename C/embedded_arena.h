@@ -32,33 +32,48 @@ static inline void arena_init(Arena_t * a, unsigned char * buffer_ptr, size_t bu
 }
 
 // =======================================================================
-// arena_alloc
+// align_offset
 // =======================================================================
-// Allocates a block of memory from the arena.
+// Helper function to round the offset up to the next multiple of alignment.
+// Parameters:
+//   offset    - current offset in the arena
+//   alignment - desired alignment (must be power of 2, e.g., 1, 2, 4, 8)
+// Returns:
+//   aligned offset
+// =======================================================================
+static inline size_t align_offset(size_t offset, size_t alignment)
+{
+    return (offset + (alignment - 1)) & ~(alignment - 1);
+}
+
+// =======================================================================
+// arena_alloc_aligned
+// =======================================================================
+// Allocates a block of memory from the arena with the specified alignment.
 // Parameters:
 //   a          - pointer to the Arena_t
 //   alloc_size - number of bytes to allocate
+//   alignment  - alignment requirement (e.g., 4 for int, 8 for double)
 // Returns:
 //   pointer to the allocated memory, or NULL if there is not enough space
-//
-// NOTE: This function does not perform type checking or alignment.
-//       Cast the returned pointer as needed.
 // =======================================================================
-static inline void * arena_alloc(Arena_t * a, size_t alloc_size)
+static inline void * arena_alloc_aligned(Arena_t * a, size_t alloc_size, size_t alignment)
 {
-    // Check if there is enough space left in the arena
-    if ((a->offset + alloc_size) > a->buffer_size)
+    // Round current offset up to the next aligned address
+    size_t aligned_offset = align_offset(a->offset, alignment);
+
+    // Check if there is enough space in the arena
+    if ((aligned_offset + alloc_size) > a->buffer_size)
     {
-        return NULL; // Return NULL if the buffer is full
+        return NULL; // Not enough memory
     }
 
-    // Compute the pointer to the next free memory block
-    unsigned char * ptr = a->buffer_start + a->offset;
+    // Compute pointer to the allocated block
+    unsigned char * ptr = a->buffer_start + aligned_offset;
 
-    // Update the offset for the next allocation
-    a->offset += alloc_size;
+    // Update offset for next allocation
+    a->offset = aligned_offset + alloc_size;
 
-    // Return the pointer to the allocated memory
     return ptr;
 }
 
@@ -75,6 +90,3 @@ static inline void arena_reset(Arena_t * a)
 }
 
 #endif
-
-
-//TODO: Alignment
