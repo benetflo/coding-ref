@@ -3,6 +3,12 @@
 
 #include <stdlib.h> // For size_t
 
+// NOTE: Alignment may introduce padding between allocations.
+// For example, allocating a char followed by an int may leave unused bytes
+// to ensure the int starts at a 4-byte aligned address.
+// To reduce wasted space, consider allocating larger types first, then smaller ones.
+
+
 // =======================================================================
 // Arena_t
 // =======================================================================
