@@ -8,6 +8,10 @@
 // to ensure the int starts at a 4-byte aligned address.
 // To reduce wasted space, consider allocating larger types first, then smaller ones.
 
+// NOTE: Each data type must be allocated at an offset that is a multiple of its size.
+// For example, a 4-byte int must start at an offset divisible by 4, a 2-byte short at an offset divisible by 2, etc.
+// This ensures correct alignment for the CPU and avoids crashes or slow memory access.
+
 
 // =======================================================================
 // Arena_t
