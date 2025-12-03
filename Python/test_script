@@ -4,8 +4,15 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-a", "--amount", type=int)
+parser.add_argument("-b", "--b_flag", action="store_true")
 
 args = parser.parse_args()
-amount = args.amount
 
-print(amount)
+while args.amount > 0:
+    print(args.amount)
+    args.amount -= 1
+
+if args.b_flag:
+    print("Flag is set")
+else:
+    print("Flag is not set")
