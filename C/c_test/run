@@ -1,0 +1,4 @@
+#!/bin/bash
+
+gcc -IUnity -o test_module test_module.c module.c Unity/src/unity.c
+./test_module
